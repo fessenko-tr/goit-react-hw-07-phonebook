@@ -1,12 +1,16 @@
 import React, { useReducer } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+
 import s from "./ContactForm.module.css";
 import initialState from "./initialState";
-import { useDispatch } from "react-redux";
-import { addNewContact } from "../../redux/phonebook/phonebook-actions";
+import { addContact } from "../../redux/phonebook/operations";
+import isAlreadyAdded from "./isAlreadyAdded-function";
 
 function ContactForm() {
   const [state, dispatchState] = useReducer(handleChange, initialState);
   const dispatch = useDispatch();
+  const contactsArray = useSelector((state) => state.phonebook.contacts);
 
   function handleChange(state, action) {
     const { option, value } = action;
@@ -19,9 +23,17 @@ function ContactForm() {
   }
 
   function submitNewContact(e) {
-    const { name, number } = state;
+    const { name } = state;
+
     e.preventDefault();
-    dispatch(addNewContact(name, number));
+
+    if (isAlreadyAdded(contactsArray, name)) {
+      toast.info(`${name} has already been added`);
+      dispatchState({ option: "reset" });
+      return;
+    }
+
+    dispatch(addContact(state));
     dispatchState({ option: "reset" });
   }
 

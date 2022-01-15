@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import s from "./Filter.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { updateFilter } from "../../redux/phonebook/phonebook-actions";
@@ -24,10 +23,5 @@ function Filter() {
     </>
   );
 }
-
-Filter.propTypes = {
-  filterValue: PropTypes.string,
-  updateFilterFunc: PropTypes.func,
-};
 
 export default Filter;

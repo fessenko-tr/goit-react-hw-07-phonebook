@@ -1,17 +1,16 @@
 import Contact from "../Contact";
-import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteContact } from "../../redux/phonebook/phonebook-actions";
+import { deleteContactById } from "../../redux/phonebook/operations";
 
 function ContactList() {
   const contactsArray = useSelector((state) => state.phonebook.contacts);
   const filterValue = useSelector((state) => state.phonebook.filter);
   const dispatch = useDispatch();
 
-  const deleteContactBtn = (id) => dispatch(deleteContact(id));
+  const deleteContactBtn = (id) => dispatch(deleteContactById(id));
 
   const getFilteredContacts = contactsArray.filter((el) =>
-    el.name.toLowerCase().includes(filterValue.toLowerCase())
+    el.name?.toLowerCase().includes(filterValue.toLowerCase())
   );
 
   const contactsList = getFilteredContacts.map(({ id, name, number }) => (
@@ -26,16 +25,5 @@ function ContactList() {
 
   return <ul>{contactsList}</ul>;
 }
-
-ContactList.propTypes = {
-  contactsArray: PropTypes.arrayOf(
-    PropTypes.exact({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ),
-  deleteContactBtn: PropTypes.func,
-};
 
 export default ContactList;
